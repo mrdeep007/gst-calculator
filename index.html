@@ -3,177 +3,249 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unified GST Calculator</title>
+  <title>Free GST Calculator</title>
   <style>
-    /* Basic Reset */
+    /* Reset & Base Styles */
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      line-height: 1.6;
       background: #f4f4f4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    /* Header */
+    header {
+      background: #1e90ff;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.2em;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: url('https://via.placeholder.com/1500x500?text=GST+Calculator') no-repeat center center/cover;
+      padding: 60px 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .hero h2 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+    
+    /* Main Container */
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
       padding: 20px;
     }
-    /* Container styling */
-    .container {
+    
+    /* Calculator Card */
+    .calculator {
       background: #fff;
       padding: 30px;
       border-radius: 8px;
-      width: 100%;
-      max-width: 450px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    h1 {
+    .calculator h3 {
+      margin-bottom: 15px;
       text-align: center;
-      margin-bottom: 20px;
-      color: #333;
     }
-    label {
+    .calculator label {
       display: block;
-      margin-top: 15px;
+      margin-bottom: 5px;
       font-weight: bold;
-      color: #555;
     }
-    input[type="number"] {
+    .calculator input[type="number"] {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      margin-bottom: 15px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 1em;
     }
-    .note {
-      margin-top: 15px;
-      font-size: 14px;
+    .calculator .note {
+      font-size: 0.9em;
       color: #777;
+      margin-bottom: 15px;
     }
-    #gstAmount {
+    .result {
       margin-top: 20px;
       text-align: center;
-      font-size: 18px;
+      font-size: 1.2em;
       font-weight: bold;
-      color: #333;
+      line-height: 1.8;
+    }
+    
+    /* Footer */
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 40px;
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
+  <!-- Header -->
+  <header>
+    <h1>Free GST Calculator</h1>
+    <p>Calculate GST Easily &amp; Accurately</p>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <h2>Instant GST Calculation</h2>
+    <p>Enter your details below to get a detailed breakdown including base price, GST amount, and final price.</p>
+  </section>
+  
+  <!-- Main Container -->
   <div class="container">
-    <h1>GST Calculator</h1>
-    
-    <label for="gstRate">GST Rate (%)</label>
-    <input type="number" id="gstRate" step="0.01" placeholder="Enter GST rate" required>
-    
-    <label for="priceEx">Price (GST Excluded / Base Price)</label>
-    <input type="number" id="priceEx" step="0.01" placeholder="Enter price without GST">
-    
-    <label for="priceIn">Price (GST Included / Final Price)</label>
-    <input type="number" id="priceIn" step="0.01" placeholder="Enter price with GST">
-    
-    <div class="note">
-      * Enter a value in either the <strong>GST Excluded</strong> field or the <strong>GST Included</strong> field. The other value and the GST amount will be calculated automatically.
+    <div class="calculator">
+      <h3>GST Calculator</h3>
+      
+      <!-- GST Rate -->
+      <label for="gstRate">GST Rate (%)</label>
+      <input type="number" id="gstRate" step="0.01" placeholder="e.g. 18" required>
+      
+      <!-- Price Without GST (Base Price) -->
+      <label for="priceEx">Price (GST Excluded)</label>
+      <input type="number" id="priceEx" step="0.01" placeholder="Enter price without GST">
+      
+      <!-- Price With GST (Final Price) -->
+      <label for="priceIn">Price (GST Included)</label>
+      <input type="number" id="priceIn" step="0.01" placeholder="Enter price with GST">
+      
+      <div class="note">
+        * Enter a value in either the GST Excluded or GST Included field. The other value and the detailed GST breakdown will be calculated automatically.
+      </div>
+      
+      <!-- Result Display -->
+      <div class="result" id="result"></div>
     </div>
-    
-    <div id="gstAmount"></div>
   </div>
-
+  
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Your Company Name. All rights reserved.
+  </footer>
+  
   <script>
     // Get DOM elements
-    const gstRateInput = document.getElementById("gstRate");
-    const priceExInput = document.getElementById("priceEx");
-    const priceInInput = document.getElementById("priceIn");
-    const gstAmountDiv = document.getElementById("gstAmount");
-
-    // To prevent event recursion when updating fields programmatically
+    const gstRateInput = document.getElementById('gstRate');
+    const priceExInput = document.getElementById('priceEx');
+    const priceInInput = document.getElementById('priceIn');
+    const resultDiv = document.getElementById('result');
+    
+    // To prevent recursive updates when modifying fields programmatically
     let isUpdating = false;
-    // Track which field the user last edited: "ex" for GST Excluded or "in" for GST Included
+    // Track which field the user last edited: "ex" for GST Excluded, "in" for GST Included
     let activeField = null;
-
-    // Function to update based on the GST Excluded (base) price
+    
+    // Function to update calculations based on the GST Excluded (base) price
     function updateFromExcluded() {
-      const exVal = parseFloat(priceExInput.value);
-      const rateVal = parseFloat(gstRateInput.value);
-      if (isNaN(exVal) || isNaN(rateVal)) {
-        priceInInput.value = "";
-        gstAmountDiv.textContent = "";
+      const basePrice = parseFloat(priceExInput.value);
+      const gstRate = parseFloat(gstRateInput.value);
+      if (isNaN(basePrice) || isNaN(gstRate)) {
+        resultDiv.textContent = "";
         return;
       }
-      const inVal = exVal * (1 + rateVal / 100);
-      const gstAmt = inVal - exVal;
+      const finalPrice = basePrice * (1 + gstRate / 100);
+      const gstAmt = finalPrice - basePrice;
       isUpdating = true;
-      priceInInput.value = inVal.toFixed(2);
-      gstAmountDiv.textContent = "GST Amount: " + gstAmt.toFixed(2);
+      priceInInput.value = finalPrice.toFixed(2);
+      resultDiv.innerHTML = `<p>Base Price (GST Excluded): ₹${basePrice.toFixed(2)}</p>
+                             <p>GST Amount: ₹${gstAmt.toFixed(2)}</p>
+                             <p>Final Price (GST Included): ₹${finalPrice.toFixed(2)}</p>`;
       isUpdating = false;
     }
-
-    // Function to update based on the GST Included (final) price
+    
+    // Function to update calculations based on the GST Included (final) price
     function updateFromIncluded() {
-      const inVal = parseFloat(priceInInput.value);
-      const rateVal = parseFloat(gstRateInput.value);
-      if (isNaN(inVal) || isNaN(rateVal)) {
-        priceExInput.value = "";
-        gstAmountDiv.textContent = "";
+      const finalPrice = parseFloat(priceInInput.value);
+      const gstRate = parseFloat(gstRateInput.value);
+      if (isNaN(finalPrice) || isNaN(gstRate)) {
+        resultDiv.textContent = "";
         return;
       }
-      const exVal = inVal / (1 + rateVal / 100);
-      const gstAmt = inVal - exVal;
+      const basePrice = finalPrice / (1 + gstRate / 100);
+      const gstAmt = finalPrice - basePrice;
       isUpdating = true;
-      priceExInput.value = exVal.toFixed(2);
-      gstAmountDiv.textContent = "GST Amount: " + gstAmt.toFixed(2);
+      priceExInput.value = basePrice.toFixed(2);
+      resultDiv.innerHTML = `<p>Base Price (GST Excluded): ₹${basePrice.toFixed(2)}</p>
+                             <p>GST Amount: ₹${gstAmt.toFixed(2)}</p>
+                             <p>Final Price (GST Included): ₹${finalPrice.toFixed(2)}</p>`;
       isUpdating = false;
     }
-
+    
+    // Function to determine which field to use for calculations
+    function recalculate() {
+      // If both price fields are empty, clear the result
+      if (priceExInput.value.trim() === "" && priceInInput.value.trim() === "") {
+        resultDiv.textContent = "";
+        return;
+      }
+      // Recalculate based on the active field or, if not set, guess which field is filled
+      if (activeField === 'ex' || (priceExInput.value.trim() !== "" && priceInInput.value.trim() === "")) {
+        updateFromExcluded();
+      } else if (activeField === 'in' || (priceInInput.value.trim() !== "" && priceExInput.value.trim() === "")) {
+        updateFromIncluded();
+      }
+    }
+    
     // Listen for input events on GST Excluded field
-    priceExInput.addEventListener("input", function () {
+    priceExInput.addEventListener('input', function() {
       if (isUpdating) return;
-      activeField = "ex";
-      // If the user clears the field, clear the calculated fields as well.
+      activeField = 'ex';
       if (priceExInput.value.trim() === "") {
         isUpdating = true;
         priceInInput.value = "";
-        gstAmountDiv.textContent = "";
+        resultDiv.textContent = "";
         isUpdating = false;
         return;
       }
-      updateFromExcluded();
+      recalculate();
     });
-
+    
     // Listen for input events on GST Included field
-    priceInInput.addEventListener("input", function () {
+    priceInInput.addEventListener('input', function() {
       if (isUpdating) return;
-      activeField = "in";
+      activeField = 'in';
       if (priceInInput.value.trim() === "") {
         isUpdating = true;
         priceExInput.value = "";
-        gstAmountDiv.textContent = "";
+        resultDiv.textContent = "";
         isUpdating = false;
         return;
       }
-      updateFromIncluded();
+      recalculate();
     });
-
-    // Listen for changes in GST Rate and update accordingly
-    gstRateInput.addEventListener("input", function () {
-      // If the GST rate is cleared or invalid, clear calculated values.
-      if (gstRateInput.value.trim() === "" || parseFloat(gstRateInput.value) < 0) {
-        isUpdating = true;
-        priceExInput.value = "";
-        priceInInput.value = "";
-        gstAmountDiv.textContent = "";
-        isUpdating = false;
-        return;
-      }
-      // Recalculate based on the last active field.
-      if (activeField === "ex") {
-        updateFromExcluded();
-      } else if (activeField === "in") {
-        updateFromIncluded();
-      }
+    
+    // Also recalculate if the GST rate changes
+    gstRateInput.addEventListener('input', function() {
+      recalculate();
     });
   </script>
 </body>
